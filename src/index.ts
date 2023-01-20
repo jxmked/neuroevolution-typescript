@@ -1,1 +1,6 @@
-export { Neuroevolution } from './neuroevolution';
+import Neuroevolution from './neuroevolution';
+
+
+export default Neuroevolution;
+
+export { Neuroevolution };
