@@ -111,7 +111,7 @@ export default class Network {
             const newLayerNeurons: Neuron[] = newLayer.neurons;
 
             // Since we load network data, we now apply the data to the neurons from new layer
-            for(const neuron of newLayerNeurons) {
+            for (const neuron of newLayerNeurons) {
                 const weightLength: number = neuron.weights.length;
 
                 for (let weightIndex = 0; weightIndex < weightLength; weightIndex++) {

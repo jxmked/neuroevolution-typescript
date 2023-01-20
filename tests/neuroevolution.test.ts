@@ -87,7 +87,6 @@ test('Can initiate generations', () => {
 test('Can solve atleast 50%', () => {
     let errorRate = 100;
     while (errorRate > 50) {
-
         for (const gen of generations) {
             let winrate = 0;
 

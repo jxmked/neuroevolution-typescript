@@ -7,35 +7,62 @@ import pkg from './package.json' assert { type: "json" };
 import terser from '@rollup/plugin-terser';
 
 const devMode = process.env.mode !== 'production';
+
 const name = "Neuroevolution";
 
-console.log("Mode: " + process.env.mode);
+/**
+ * Terser cannot execute on Android Termux
+ * 
+ * */
+const isTerserCanExecute = !(/(com\.termux)/i.test(String(process.env.NODE)));
 
-export default {
-    input: './src/index.ts',
-    output: [{
-        file: pkg.unpkg,
-        format: 'umd',
-        sourcemap: devMode,
-        name: name
-    }],
-    treeshake: !devMode,
-    plugins: [
-        !devMode && 
-            terser({
-                format: {
-                    comments: false
-                },
-                compress: false
+console.log("Mode: " + process.env.mode);
+console.log("Terser can execute: " + isTerserCanExecute);
+
+export default (cli_args) => {
+    const output = []
+    
+    if(cli_args.umd) {
+        delete cli_args.umd;
+        output.push({
+            file: pkg.unpkg,
+            format: 'umd',
+            sourcemap: devMode,
+            name: name
+        })
+    }
+    
+    if(cli_args.node) {
+        delete cli_args.node;
+        output.push({
+            file: pkg.main,
+            name: name,
+            format: 'es',
+            sourcemap: devMode
+        })
+    }
+    
+    return {
+        input: './src/index.ts',
+        output: output,
+        treeshake: !devMode,
+        plugins: [
+            !devMode && isTerserCanExecute &&
+                terser({
+                    format: {
+                        comments: false
+                    },
+                    compress: false
+                }),
+            typescript(),
+            json(),
+            commonjs(),
+            summary(),
+            resolve({
+                preferBuiltins: false,
+                // browser: true,
+                extensions: ['.ts'],
             }),
-        typescript(),
-        json(),
-        commonjs(),
-        summary(),
-        resolve({
-            preferBuiltins: false,
-            // browser: true,
-            extensions: ['.ts'],
-        }),
-    ]
-};
+        ]
+    };
+}
