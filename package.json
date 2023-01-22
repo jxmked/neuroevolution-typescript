@@ -1,6 +1,6 @@
 {
   "name": "neuroevolution-typescript",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Neuroevolution library in TypeScript",
   "keywords": [
     "Neuroevolution",
@@ -24,11 +24,13 @@
   "scripts": {
     "test": "jest ./tests --config=jest.config.js",
     "start": "npm run dev",
-    "dev": "rollup -c --environment mode:development -w",
+    "dev": "rollup -c rollup.config.js --environment mode:development --umd --node -w",
+    "dev:umd": "rollup -c rollup.config.js --environment mode:development --umd -w",
+    "dev:node": "rollup -c rollup.config.js --environment mode:development --node -w",
     "serve": "serve ./dist -n -L -p 8080",
-    "build": "npm run build:umd && npm run build:node",
-    "build:umd": "rollup -c --environment mode:production",
-    "build:node": "rollup -c rollup.node.config.js --environment mode:production",
+    "build": "rollup -c rollup.config.js --umd --node --environment mode:production",
+    "build:umd": "rollup -c rollup.config.js --environment mode:production --umd",
+    "build:node": "rollup -c rollup.config.js --environment mode:production --node",
     "build:tsc": "tsc --declaration true --emitDeclarationOnly --declarationDir dist/declarations",
     "build:test": "tsc -p tsconfig.test.json",
     "prettier-format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
@@ -48,13 +50,15 @@
     "eslint": "^8.32.0",
     "lodash": "^4.17.21",
     "prettier": "^1.19.1",
+    "rimraf": "^4.1.1",
     "rollup": "^3.10.0",
     "rollup-plugin-summary": "^2.0.0",
     "rollup-watch": "^4.3.1",
     "serve": "^14.1.2",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "uglify-js": "^3.17.4"
   },
   "files": [
     "./dist/"

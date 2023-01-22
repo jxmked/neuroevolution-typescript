@@ -1,4 +1,4 @@
-import Neuroevolution from '../src';
+import { Neuroevolution } from '../src';
 import Generations from '../src/generations';
 import { flatten } from 'lodash';
 import Genome from '../src/network/genome';

@@ -6,7 +6,7 @@
  */
 
 import Genome from './network/genome';
-import Neuroevolution from './index';
+import Neuroevolution from './neuroevolution';
 import { INetworkData } from './types/network-data';
 
 /**
@@ -36,22 +36,25 @@ export default class Generation {
      */
     public addGenome(genome: Genome): void {
         /* locate position to insert Genome into, the gnomes should remain sorted */
-        const pos = 0;
-        for (let i = pos; i < this.genomes.length; i++) {
+        let pos = 0;
+        for (const instanceGenome of this.genomes) {
+            pos++;
+
             /* sort in descending order */
             if (this.ne.options.scoreSort < 0) {
-                if (genome.score > this.genomes[i].score) {
+                if (genome.score > instanceGenome.score) {
                     break;
                 }
             } else {
                 /* sort in ascending order */
-                if (genome.score < this.genomes[i].score) {
+                if (genome.score < instanceGenome.score) {
                     break;
                 }
             }
         }
 
         /* insert genome into correct position */
+
         this.genomes.splice(pos, 0, genome);
     }
 

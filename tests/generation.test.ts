@@ -1,6 +1,6 @@
 import { clamp, flatten } from 'lodash';
 import Generation from '../src/generation';
-import Neuroevolution from '../src/index';
+import { Neuroevolution } from '../src/index';
 import Genome from '../src/network/genome';
 
 const options = {

@@ -6,9 +6,15 @@
  */
 
 import Generations from './generations';
+import Generation from './generation';
 import Genome from './network/genome';
 import Network from './network/network';
-import { INeuroevolutionConfigRequired, INeuroevolutionConfig } from './types/neuroevolution-config';
+// prettier-ignore
+import {
+    INeuroevolutionConfigRequired, 
+    INeuroevolutionConfig,
+    IExportData
+} from './types/neuroevolution-config';
 import { INetworkData } from './types/network-data';
 
 /**
@@ -108,6 +114,51 @@ class Neuroevolution {
         }
 
         return nns;
+    }
+
+    /**
+     * Export Trained Data
+     * */
+    exportData(): IExportData {
+        const toExport: IExportData = {
+            config: this.options,
+            data: []
+        };
+
+        if (this.generations.getGenerations().length < 1) {
+            return toExport;
+        }
+
+        toExport.data = this.generations.getGenerations().map((gen) => {
+            return gen.getGenomes().map((genome) => {
+                return {
+                    network: genome.network,
+                    score: genome.score
+                };
+            });
+        });
+
+        return toExport;
+    }
+
+    /**
+     * Import Pretrained Data
+     * */
+    importData(data: IExportData): void {
+        /* eslint-disable @typescript-eslint/no-unnecessary-condition */
+        if (data.config) {
+            this.setConfiguration(data.config);
+        }
+
+        data.data.map((generation) => {
+            const gen = new Generation(this);
+
+            generation.map(({ score, network }) => {
+                gen.addGenome(new Genome(score, network));
+            });
+
+            this.generations.getGenerations().push(gen);
+        });
     }
 
     /**
