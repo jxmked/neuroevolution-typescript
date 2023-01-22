@@ -120,26 +120,30 @@ instance.networkScore(generations[0], Math.ceil(result[0]) === expected);
 
 // Repeat the process from creating generations
 
-
-
 ```
 
 ***Exporting and Importing***
 
-```
+```ts
 // Must have atleast 1 generation completed before exporting trained data
 
 // Your trained data including the configurations
 const data = instance.exportData();
 
+const otherNeuvol = new Neuroevolution();
+
 // Import pretrained data
 
-// Note: Will reset the generations. 
-// Note: Previous trained data will be cleared
 
 // Note: Will set the configurations from data
 
-instance.importData(data);
+// Import first before calling
+// nextGeneration() function otherwise will not work correctly
+
+otherNeuvol.importData(data);
+
+
+otherNeuvol = instance.nextGeneration()
 
 ```
 
