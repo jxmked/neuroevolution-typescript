@@ -5,6 +5,8 @@
  * @license      Digitsensitive
  */
 
+import { INetworkData } from './network-data';
+
 export interface INeuroevolutionConfig {
     network?: (number | number[])[];
     population?: number;
@@ -19,3 +21,13 @@ export interface INeuroevolutionConfig {
 }
 
 export type INeuroevolutionConfigRequired = Required<INeuroevolutionConfig>;
+
+export interface IExportDataData {
+    score: number;
+    network: INetworkData;
+}
+
+export interface IExportData {
+    config: INeuroevolutionConfigRequired;
+    data: IExportDataData[][];
+}

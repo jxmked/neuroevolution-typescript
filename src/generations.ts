@@ -8,7 +8,7 @@
 import Generation from './generation';
 import Genome from './network/genome';
 import Network from './network/network';
-import Neuroevolution from './index';
+import Neuroevolution from './neuroevolution';
 import { INetworkData } from './types/network-data';
 
 export default class Generations {

@@ -12,7 +12,7 @@ export default class Genome {
     private __network__: INetworkData;
 
     constructor(score: number, network: INetworkData) {
-        this.__score__ = score || 0;
+        this.__score__ = score;
 
         this.__network__ = Object.assign(
             {

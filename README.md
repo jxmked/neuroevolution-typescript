@@ -90,6 +90,60 @@ interface INeuroevolutionConfig {
 }
 ```
 
+## Usage
+
+```ts
+import { Neuroevolution } from 'neuroevolution-typescript';
+
+const config = {
+    ...
+}
+
+// Create an instance 
+const instance: Neuroevolution = new Neuroevolution(config);
+
+// Will return an array of generation
+// The array length is based on population
+const generations = instance.nextGeneration();
+
+
+const input = [0,1,1];
+const expected = 1;
+
+// Do compute
+// Will return a prediction number ranging 1 to 0
+let result = generations[0].compute(input);
+
+
+// Tell if is right or wrong
+instance.networkScore(generations[0], Math.ceil(result[0]) === expected);
+
+// Repeat the process from creating generations
+
+
+
+```
+
+***Exporting and Importing***
+
+```
+// Must have atleast 1 generation completed before exporting trained data
+
+// Your trained data including the configurations
+const data = instance.exportData();
+
+// Import pretrained data
+
+// Note: Will reset the generations. 
+// Note: Previous trained data will be cleared
+
+// Note: Will set the configurations from data
+
+instance.importData(data);
+
+```
+
+
 ## Ressources
 
 [Deep Neuroevolution: Genetic Algorithms are a Competitive Alternative for

@@ -1,5 +1,5 @@
 import { isEqual, cloneDeep } from 'lodash';
-import Neuroevolution from '../src/index';
+import { Neuroevolution } from '../src/index';
 import Network from '../src/network/network';
 
 const options = {
@@ -86,6 +86,7 @@ test('Can initiate generations', () => {
 
 test('Can solve atleast 50%', () => {
     let errorRate = 100;
+
     while (errorRate > 50) {
         for (const gen of generations) {
             let winrate = 0;
@@ -97,7 +98,6 @@ test('Can solve atleast 50%', () => {
                     winrate++;
                 }
             }
-
             errorRate = (winrate / trainingSet.length) * 100;
             Neuvol.networkScore(gen, 100 - errorRate);
         }
@@ -106,4 +106,43 @@ test('Can solve atleast 50%', () => {
     }
 
     expect(errorRate).toBeLessThanOrEqual(50);
+
+    // I found that test suit run async so
+
+    //});
+
+    //test('Can do export and import data', () => {
+
+    // Export
+    const exportedData = Neuvol.exportData();
+
+    // Create New Neuroevolution Instance
+    const feededNeuvol = new Neuroevolution(options);
+    let feededGenerations: Network[] = [];
+    // Import
+    Neuvol.importData(exportedData);
+
+    // Test
+    const target = 30;
+
+    // Check if we can hit this
+    while (errorRate > target) {
+        feededGenerations = feededNeuvol.nextGeneration();
+
+        for (const gen of feededGenerations) {
+            let winrate = 0;
+
+            for (const sampleSet of trainingSet) {
+                const result = Math.round(gen.compute(sampleSet.input)[0]);
+
+                if (result === sampleSet.expected) {
+                    winrate++;
+                }
+            }
+            errorRate = (winrate / trainingSet.length) * 100;
+            feededNeuvol.networkScore(gen, 100 - errorRate);
+        }
+    }
+
+    expect(errorRate).toBeLessThanOrEqual(target);
 });

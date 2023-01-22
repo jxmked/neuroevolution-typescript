@@ -167,7 +167,6 @@ export default class Network {
                     sum += prevLayer.neurons[prevLayerNeuronIndex].value * currentLayer.neurons[neuronIndex].weights[prevLayerNeuronIndex];
                 }
 
-                // compute the activation of the Neuron
                 currentLayer.neurons[neuronIndex].setValue(this.activation(sum));
             }
         }
