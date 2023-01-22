@@ -9,5 +9,4 @@ node_modules
 /lib
 *.tsx
 yarn.lock
-package-lock.json
 /dist
