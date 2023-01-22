@@ -32,7 +32,6 @@
     "build:umd": "rollup -c rollup.config.js --environment mode:production --umd",
     "build:node": "rollup -c rollup.config.js --environment mode:production --node",
     "build:tsc": "tsc --declaration true --emitDeclarationOnly --declarationDir dist/declarations",
-    "build:test": "tsc -p tsconfig.test.json",
     "prettier-format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "lint": "eslint -c .eslintrc.json ./src",
     "lint:fix": "eslint -c .eslintrc.json ./src --fix"

@@ -18,11 +18,6 @@ labeled examples of desired strategies.
 ## Motivation
 
 This library has been greatly influenced by [xviniette](https://github.com/xviniette/FlappyLearning).
-My motivation was to rewrite it in TypeScript.
-
-## Usage
-
-`import Neuroevolution from 'neuroevolution-typescript';`
 
 ## Configuration
 
