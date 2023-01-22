@@ -150,10 +150,10 @@ class Neuroevolution {
             this.setConfiguration(data.config);
         }
 
-        data.data.map((generation) => {
+        data.data.forEach((generation) => {
             const gen = new Generation(this);
 
-            generation.map(({ score, network }) => {
+            generation.forEach(({ score, network }) => {
                 gen.addGenome(new Genome(score, network));
             });
 
