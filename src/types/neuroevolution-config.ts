@@ -18,6 +18,7 @@ export interface INeuroevolutionConfig {
     lowHistoric?: boolean;
     scoreSort?: number;
     nbChild?: number;
+    crossoverFactor?: number;
 }
 
 export type INeuroevolutionConfigRequired = Required<INeuroevolutionConfig>;

@@ -36,8 +36,6 @@ export default class Generation {
      */
     public addGenome(genome: Genome): void {
         /* locate position to insert Genome into, the gnomes should remain sorted */
-        const { scoreSort } = this.ne.options;
-
         for (let i = 0; i < this.genomes.length; i++) {
             if (this.ne.options.scoreSort < 0) {
                 /* sort in descending order */
@@ -68,7 +66,7 @@ export default class Generation {
         }
 
         const networkDatas: INetworkData[] = [];
-        const { elitism, population, randomBehaviour, nbChild } = this.ne.options;
+        const { elitism, population, randomBehaviour } = this.ne.options;
         const populationEvolutionary: number = Math.round(elitism * population);
         const noiseLevel: number = Math.round(randomBehaviour * population);
 
@@ -79,29 +77,42 @@ export default class Generation {
             }
         }
 
+        /**
+         * This noise level loop will help AI to solve
+         * problem based on genome with highest score
+         * */
         for (let i = 0; i < noiseLevel; i++) {
-            const network: INetworkData = cloneDeep(this.genomes[1].network);
+            if (networkDatas.length > population) {
+                break;
+            }
+
+            /**
+             * Create new Generation based on genome with highest
+             * score from last generation
+             * */
+            const network: INetworkData = cloneDeep(this.genomes[0].network);
 
             for (let weightIndex = 0; weightIndex < network.weights.length; weightIndex++) {
                 network.weights[weightIndex] = this.randomClamped();
             }
 
-            if (networkDatas.length < population) {
-                networkDatas.push(network);
-            }
+            networkDatas.push(network);
         }
 
-        let max = 0;
+        let max = 1;
 
         /* eslint-disable no-constant-condition */
         /* eslint-disable @typescript-eslint/no-unnecessary-condition */
         while (true) {
             for (let i = 0; i < max; i++) {
-                /* create the children and push them to the nexts array */
-                const childs = this.breed(this.genomes[i], this.genomes[max], nbChild > 0 ? nbChild : 1);
+                /**
+                 * Breed 2 genomes
+                 * */
+                const childs = this.breeder(this.genomes[i], this.genomes[max]);
 
                 for (const child of childs) {
                     networkDatas.push(child.network);
+
                     if (networkDatas.length >= population) {
                         /**
                          * Return once number of children is equal to the
@@ -113,12 +124,27 @@ export default class Generation {
             }
 
             max++;
-            if (max >= this.genomes.length - 1) {
+            if (max >= this.genomes.length) {
                 max = 0;
             }
         }
     }
 
+    private breeder(firstGenome: Genome, secondGenome: Genome): Genome[] {
+        let { nbChild } = this.ne.options;
+        nbChild = nbChild > 0 ? nbChild : 1;
+
+        /**
+         * Randomly select breeding technique
+         *
+         * May improve mixing weights
+         * */
+        if (this.randomClamped() < 0) {
+            return this.breeder_1(firstGenome, secondGenome, nbChild);
+        }
+
+        return this.breeder_2(firstGenome, secondGenome, nbChild);
+    }
     /**
      * Breed to genomes to produce offspring(s)
      * @param  {[type]} g1       [Genome 1]
@@ -126,35 +152,80 @@ export default class Generation {
      * @param  {[type]} nbChilds [Number of offspring (children)]
      * @return {Object}          [Object]
      */
-    private breed(g1: Genome, g2: Genome, nbChilds: number): Genome[] {
-        const datas: Genome[] = [];
-        const crossoverFactor = 0.5;
-        const { mutationRate } = this.ne.options;
+    private breeder_1(g1: Genome, g2: Genome, nbChild: number): Genome[] {
+        const childs: Genome[] = [];
+        const { mutationRate, crossoverFactor } = this.ne.options;
 
-        for (let nb = 0; nb < nbChilds; nb++) {
+        for (let nb = 0; nb < nbChild; nb++) {
             /* Deep clone of genome 1 */
-            const data: Genome = cloneDeep(g1);
+            const childGenome: Genome = new Genome(g1.score, g1.network);
 
+            // Uniform crossover
             for (let i = 0; i < g2.network.weights.length; i++) {
                 /* Genetic crossover
-                 * 0.5 is the crossover factor.
                  * FIXME Really should be a predefined constant */
                 if (Math.random() <= crossoverFactor) {
-                    data.network.weights[i] = g2.network.weights[i];
+                    childGenome.network.weights[i] = g2.network.weights[i];
                 }
             }
 
             /* perform mutation on some weights */
-            for (let i = 0; i < data.network.weights.length; i++) {
+            for (let i = 0; i < childGenome.network.weights.length; i++) {
                 if (Math.random() <= mutationRate) {
-                    data.network.weights[i] += Math.random() * mutationRate * 2 - mutationRate;
+                    childGenome.network.weights[i] += Math.random() * mutationRate * 2 - mutationRate;
                 }
             }
 
-            datas.push(data);
+            childs.push(childGenome);
         }
 
-        return datas;
+        return childs;
+    }
+
+    private breeder_2(g1: Genome, g2: Genome, nbChild: number): Genome[] {
+        const childs: Genome[] = [];
+        const { mutationRate } = this.ne.options;
+        const weightsLength = g2.network.weights.length;
+
+        for (let nb = 0; nb < nbChild; nb++) {
+            /**
+             * Crrate the child based on first genome
+             * */
+            const childGenome: Genome = new Genome(g1.score, g1.network);
+
+            /**
+             * Select two random points of crossover
+             *
+             * We will specify the range of cross over
+             * in between weight length
+             * */
+            let point1: number = Math.floor(Math.random() * weightsLength);
+            let point2: number = Math.floor(Math.random() * weightsLength);
+
+            if (point1 > point2) {
+                [point1, point2] = [point2, point1];
+            }
+
+            /**
+             * Crossover between the two points
+             * */
+            for (let i = point1; i < point2; i++) {
+                childGenome.network.weights[i] = g2.network.weights[i];
+            }
+
+            /**
+             * Perform mutation on some weight
+             * Resulting some weight gets larger than we expect
+             * */
+            for (let i = 0; i < childGenome.network.weights.length; i++) {
+                if (Math.random() <= mutationRate) {
+                    childGenome.network.weights[i] += Math.random() * mutationRate * 2 - mutationRate;
+                }
+            }
+
+            childs.push(childGenome);
+        }
+        return childs;
     }
 
     /**
