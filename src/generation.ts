@@ -36,25 +36,26 @@ export default class Generation {
      */
     public addGenome(genome: Genome): void {
         /* locate position to insert Genome into, the gnomes should remain sorted */
-        let pos = 0;
+        const { scoreSort } = this.ne.options;
+
         for (let i = 0; i < this.genomes.length; i++) {
             if (this.ne.options.scoreSort < 0) {
                 /* sort in descending order */
                 if (genome.score > this.genomes[i].score) {
-                    pos = i;
-                    break;
+                    this.genomes.splice(i, 0, genome);
+                    return;
                 }
             } else {
                 /* sort in ascending order */
                 if (genome.score < this.genomes[i].score) {
-                    pos = i;
-                    break;
+                    this.genomes.splice(i, 0, genome);
+                    return;
                 }
             }
         }
 
         /* insert genome into correct position */
-        this.genomes.splice(pos, 0, genome);
+        this.genomes.push(genome);
     }
 
     /**
