@@ -1,10 +1,3 @@
-/**
- * @author       Digitsensitive <digit.sensitivee@gmail.com>
- * @copyright    2017 - 2019 Digitsensitive
- * @description  Neuroevolution: Genome
- * @license      Digitsensitive
- */
-
 import { INetworkData } from '../types/network-data';
 
 export default class Genome {

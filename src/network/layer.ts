@@ -1,10 +1,3 @@
-/**
- * @author       Digitsensitive <digit.sensitivee@gmail.com>
- * @copyright    2017 - 2019 Digitsensitive
- * @description  Neuroevolution: Layer
- * @license      Digitsensitive
- */
-
 import Neuron from './neuron';
 
 export default class Layer {

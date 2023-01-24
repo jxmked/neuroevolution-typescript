@@ -1,10 +1,3 @@
-/**
- * @author       Digitsensitive <digit.sensitivee@gmail.com>
- * @copyright    2017 - 2019 Digitsensitive
- * @description  Neuroevolution: Network
- * @license      Digitsensitive
- */
-
 import Layer from './layer';
 import Neuron from './neuron';
 import { INetworkData } from '../types/network-data';

@@ -1,10 +1,3 @@
-/**
- * @author       Digitsensitive <digit.sensitivee@gmail.com>
- * @copyright    2017 - 2019 Digitsensitive
- * @description  Neuroevolution: Neuron
- * @license      Digitsensitive
- */
-
 export default class Neuron {
     public value: number;
     public weights: number[];

@@ -1,10 +1,3 @@
-/**
- * @author       Digitsensitive <digit.sensitivee@gmail.com>
- * @copyright    2017 - 2019 Digitsensitive
- * @description  Neuroevolution: Generation
- * @license      Digitsensitive
- */
-
 import Genome from './network/genome';
 import Neuroevolution from './neuroevolution';
 import { INetworkData } from './types/network-data';

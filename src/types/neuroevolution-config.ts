@@ -1,10 +1,3 @@
-/**
- * @author       Digitsensitive <digit.sensitivee@gmail.com>
- * @copyright    2017 - 2019 Digitsensitive
- * @description  Neuroevolution: Neuroevolution config interface
- * @license      Digitsensitive
- */
-
 import { INetworkData } from './network-data';
 
 export interface INeuroevolutionConfig {
