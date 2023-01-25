@@ -11,17 +11,17 @@ jobs:
 
     steps:
       - name: "checkout"
-        uses: actions/checkout@v2.4.2
+      - uses: actions/checkout@v2.4.2
         
       - name: 🟢 node
-        uses: actions/setup-node@v3.4.1
+      - uses: actions/setup-node@v3.4.1
       
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org
       
       - name: "Building"
-        run: |
+      - run: |
           npm ci
           npm test
           npm run build
@@ -31,8 +31,9 @@ jobs:
     name: "Publish"
     runs-on: ubuntu-latest
     needs: build
+    
     steps:
       - name: "NPM Package Publish"
-        run: npm publish --access public
+      - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
