@@ -24,12 +24,13 @@ jobs:
               run: npm test
 
             - name: "Building Source Code..."
-              run: npm run build
+              run: "npm run build"
 
             - name: "building Type Interface"
-              run: npm run build:tsc
+              run: "npm run build:tsc"
 
             - name: "NPM Package Publish"
               run: npm publish --access public
+              
               env:
                   NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
