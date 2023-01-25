@@ -15,6 +15,14 @@ widely than supervised learning algorithms, which require a syllabus of correct 
 of a network's performance at a task. For example, the outcome of a game (i.e. whether one player won or lost) can be easily measured without providing
 labeled examples of desired strategies.
 
+
+## Installation
+
+Browser: `<script src="https://unpkg.com/ts-neuroevolution/dist/neuroevolution.js></script>`
+
+NPM: `npm install --save ts-neuroevolution`
+
+
 ## Motivation
 
 This library has been greatly influenced by [xviniette](https://github.com/xviniette/FlappyLearning).
