@@ -116,9 +116,8 @@ const expected = 1;
 // Do compute
 
 for(let i = 0; i < instance.options.population; i++) {
-// Will return a prediction number ranging 1 to 0
+// Will return a prediction number ranging 0 to 1
     let result = generations[i].compute(input);
-    
     
     // Tell if is right or wrong
     instance.networkScore(generations[i], Math.ceil(result[0]) === expected);
@@ -155,7 +154,7 @@ otherNeuvol = instance.nextGeneration();
 ```
 
 
-## Ressources
+## Resources
 
 [Deep Neuroevolution: Genetic Algorithms are a Competitive Alternative for
 Training Deep Neural Networks for Reinforcement Learning](https://arxiv.org/pdf/1712.06567.pdf)  

@@ -12,10 +12,11 @@
     "TypeScript"
   ],
   "bugs": {
-    "email": "digit.sensitivee@gmail.com"
+    "type": "git",
+    "url": "https://github.com/jxmked/neuroevolution-typescript/issues"
   },
   "license": "MIT",
-  "author": "digitsensitive <digit.sensitivee@gmail.com>",
+  "author": "",
   "type": "module",
   "main": "dist/main.js",
   "unpkg": "dist/neuroevolution.js",
@@ -65,7 +66,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/digitsensitive/neuroevolution-typescript.git"
+    "url": "git+https://github.com/jxmked/neuroevolution-typescript.git"
   },
-  "homepage": "https://github.com/digitsensitive/neuroevolution-typescript#readme"
+  "homepage": "https://github.com/jxmked/neuroevolution-typescript#readme"
 }
