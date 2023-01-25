@@ -16,16 +16,19 @@ jobs:
               with:
                   node-version: 16
                   registry-url: https://registry.npmjs.org
+
             - name: "Install Dependencies"
               run: npm ci
-              
+
             - name: "Testing"
               run: npm test
-            
-            - name: "Start Building..."
+
+            - name: "Building Source Code..."
               run: npm run build
+
+            - name: "building Type Interface"
               run: npm run build:tsc
-            
+
             - name: "NPM Package Publish"
               run: npm publish --access public
               env:
