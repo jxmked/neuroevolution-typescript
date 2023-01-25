@@ -27,11 +27,6 @@ class Neuroevolution {
      * */
     private exportableGenerations: Generation[];
 
-    /**
-     * Get all best genomes in all generation
-     * */
-    private bestGenomes: Genome[];
-
     constructor(config?: INeuroevolutionConfig) {
         this.configuration = Object.assign(
             {
@@ -45,24 +40,19 @@ class Neuroevolution {
                 lowHistoric: false, // Only save score (not the network).
                 scoreSort: -1, // Sort order (-1 = desc, 1 = asc).
                 nbChild: 1, // Number of children by breeding. number
-                crossoverFactor: 0.5 // Make an absolute copy of weight during breed 0 - 1
+                crossoverFactor: 0.5 // Probability of making an absolute copy of weight during breed 0 - 1
             },
             config
         );
 
         this.generations = new Generations(this);
         this.exportableGenerations = [];
-        this.bestGenomes = [];
     }
-
-    get options(): INeuroevolutionConfigRequired {
-        return this.configuration;
-    }
-
+    
     /**
-     * Get the configuration of this class
+     * Get instance configurations
      */
-    public getConfiguration(): INeuroevolutionConfigRequired {
+    get options(): INeuroevolutionConfigRequired {
         return this.configuration;
     }
 
@@ -133,7 +123,7 @@ class Neuroevolution {
     /**
      * Export Trained Data
      * */
-    exportData(): IExportData {
+    public exportData(): IExportData {
         const toExport: IExportData = {
             config: this.options,
             data: []
@@ -158,7 +148,7 @@ class Neuroevolution {
     /**
      * Import Pretrained Data
      * */
-    importData(data: IExportData): void {
+    public importData(data: IExportData): void {
         /* eslint-disable @typescript-eslint/no-unnecessary-condition */
         if (data.config) {
             this.setConfiguration(data.config);
@@ -177,56 +167,6 @@ class Neuroevolution {
         });
     }
 
-    public exportBestGenomes(): IExportData {
-        const toExport: IExportData = {
-            config: this.options,
-            data: []
-        };
-
-        if (this.exportableGenerations.length < 1) {
-            return toExport;
-        }
-
-        toExport.data[0] = this.bestGenomes.map((genome) => {
-            return {
-                network: genome.network,
-                score: genome.score
-            };
-        });
-
-        return toExport;
-    }
-
-    private insertBestGenome(genome: Genome): void {
-        const len = this.bestGenomes.length;
-        if (len < 1) {
-            this.bestGenomes.push(genome);
-            return;
-        }
-
-        const { population, scoreSort } = this.options;
-
-        /* locate position to insert Genome into, the gnomes should remain sorted */
-        for (let i = 0; i < len; i++) {
-            if (scoreSort < 0) {
-                /* sort in descending order */
-                if (genome.score > this.bestGenomes[i].score) {
-                    this.bestGenomes.splice(i, 0, genome);
-                    break;
-                }
-            } else {
-                /* sort in ascending order */
-                if (genome.score < this.bestGenomes[i].score) {
-                    this.bestGenomes.splice(i, 0, genome);
-                    break;
-                }
-            }
-        }
-
-        // Trim
-        this.bestGenomes = this.bestGenomes.slice(0, population);
-    }
-
     /**
      * Adds a new Genome with specified Neural Network and score.
      * @param {[type]} network [Neural Network]
@@ -238,14 +178,6 @@ class Neuroevolution {
          * but it depends of its score.
          * */
         const genome = new Genome(score, network.getCopyOfTheNetwork());
-
-        if (this.bestGenomes.length >= this.options.population) {
-            if (this.bestGenomes[this.bestGenomes.length - 1].score < score) {
-                this.insertBestGenome(cloneDeep(genome));
-            }
-        } else {
-            this.insertBestGenome(cloneDeep(genome));
-        }
 
         return this.generations.addGenome(genome);
     }
