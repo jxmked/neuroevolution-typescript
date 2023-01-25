@@ -1,0 +1,32 @@
+name: "NPM Package Deploy"
+
+on:
+    release:
+        types: [created]
+
+jobs:
+    release:
+        name: "NPM Package Deploy"
+        runs-on: ubuntu-latest
+        steps:
+            - name: "checkout"
+              uses: actions/checkout@v2.4.2
+            - name: 🟢 node
+              uses: actions/setup-node@v3.4.1
+              with:
+                  node-version: 16
+                  registry-url: https://registry.npmjs.org
+            - name: "Install Dependencies"
+              run: npm ci
+              
+            - name: "Testing"
+              run: npm test
+            
+            - name: "Start Building..."
+              run: npm run build
+              run: npm run build:tsc
+            
+            - name: "NPM Package Publish"
+              run: npm publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
