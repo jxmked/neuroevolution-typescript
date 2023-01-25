@@ -13,6 +13,7 @@
     ],
     "rules": {
         "getter-return": "error",
-        "@typescript-eslint/class-literal-property-style": "off"
+        "@typescript-eslint/class-literal-property-style": "off",
+        "no-console": "warn"
     }
 }

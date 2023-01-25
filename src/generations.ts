@@ -5,71 +5,60 @@ import Neuroevolution from './neuroevolution';
 import { INetworkData } from './types/network-data';
 
 export default class Generations {
-    private generations: Generation[];
-    private ne: Neuroevolution;
+  private generations: Generation[];
+  private ne: Neuroevolution;
 
-    constructor(ne: Neuroevolution) {
-        /* init parameters */
-        this.generations = [];
-        this.ne = ne;
+  constructor(ne: Neuroevolution) {
+    this.generations = [];
+    this.ne = ne;
+  }
+
+  public getGenerations(): Generation[] {
+    return this.generations;
+  }
+
+  /**
+   * Create the first network generation with populated
+   * random values.
+   */
+  public firstGeneration(input: number, hiddens: number[], output: number): INetworkData[] {
+    const networkData: INetworkData[] = [];
+
+    for (let i = 0; i < this.ne.options.population; i++) {
+      const network: Network = new Network();
+
+      network.generateNetworkLayers(input, hiddens, output);
+
+      networkData.push(network.getCopyOfTheNetwork());
     }
 
-    public getGenerations(): Generation[] {
-        return this.generations;
+    this.generations.push(new Generation(this.ne));
+    return networkData;
+  }
+
+  /**
+   * Create the next
+   */
+  public nextGeneration(): INetworkData[] {
+    if (this.generations.length === 0) {
+      throw new TypeError('Must call method Generations.firstGeneration() first.');
     }
 
-    /**
-     * Create the first generation
-     * @param  {[type]} input   [Input layer]
-     * @param  {[type]} hiddens [Hidden layer(s)]
-     * @param  {[type]} output  [Output layer]
-     * @return {[type]}         [First Generation]
-     */
-    public firstGeneration(input: number, hiddens: number[], output: number): INetworkData[] {
-        const networkData: INetworkData[] = [];
+    const gen: INetworkData[] = this.generations[this.generations.length - 1].generateNextGeneration();
+    this.generations.push(new Generation(this.ne));
+    return gen;
+  }
 
-        for (let i = 0; i < this.ne.options.population; i++) {
-            /* generate the Network and save it */
-            const network: Network = new Network();
-
-            network.generateNetworkLayers(input, hiddens, output);
-
-            networkData.push(network.getCopyOfTheNetwork());
-        }
-
-        this.generations.push(new Generation(this.ne));
-        return networkData;
+  public addGenome(genome: Genome): boolean {
+    /* cant add to a Generation if there are no Generations */
+    if (this.generations.length === 0) {
+      throw new Error('Cannot insert genome. Generations.generations has no item');
     }
 
-    /**
-     * Create the next Generation.
-     */
-    public nextGeneration(): INetworkData[] {
-        if (this.generations.length === 0) {
-            /* need to create first generation */
-            throw new TypeError('Must call method Generations.firstGeneration() first.');
-        }
+    const generation = this.generations[this.generations.length - 1];
 
-        const gen: INetworkData[] = this.generations[this.generations.length - 1].generateNextGeneration();
-        this.generations.push(new Generation(this.ne));
-        return gen;
-    }
+    generation.addGenome(genome);
 
-    /**
-     * Add a genome to the Generations
-     * @param  {[type]} genome [Genome]
-     * @return {[type]}        [False if no Generations to add to]
-     */
-    public addGenome(genome: Genome): boolean {
-        /* cant add to a Generation if there are no Generations */
-        if (this.generations.length === 0) {
-            return false;
-        }
-
-        const generation = this.generations[this.generations.length - 1];
-
-        generation.addGenome(genome);
-
-        return generation.getGenomes().length > 0;
-    }
+    return generation.genomes.length > 0;
+  }
 }

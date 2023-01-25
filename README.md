@@ -56,13 +56,20 @@ interface INeuroevolutionConfig {
     // Default: false
     lowHistoric?: boolean;
     
-    // Sort order (-1 = desc, 1 = asc).
+    // Sort order;
+    // Values: -1 = desc, 1 = asc).
     // Default: -1
     scoreSort?: number;
     
     // Number of children by breeding.
+    // Values: integer
     // Default: 1
     nbChild?: number;
+    
+    // Probability of making an absolute copy of weight during breed 0 - 1
+    // Values: 0.0 - 1.0
+    // Default: 0.5
+    crossoverFactor: number;
 }
 ```
 
@@ -97,6 +104,7 @@ const config = {
 // Create an instance 
 const instance: Neuroevolution = new Neuroevolution(config);
 
+// Generate new generation
 // Will return an array of generation
 // The array length is based on population
 const generations = instance.nextGeneration();
@@ -106,14 +114,18 @@ const input = [0,1,1];
 const expected = 1;
 
 // Do compute
+
+for(let i = 0; i < instance.options.population; i++) {
 // Will return a prediction number ranging 1 to 0
-let result = generations[0].compute(input);
+    let result = generations[i].compute(input);
+    
+    
+    // Tell if is right or wrong
+    instance.networkScore(generations[i], Math.ceil(result[0]) === expected);
+}
 
-
-// Tell if is right or wrong
-instance.networkScore(generations[0], Math.ceil(result[0]) === expected);
-
-// Repeat the process from creating generations
+// Optional
+// Repeat the process from generating generations
 
 ```
 
@@ -123,6 +135,7 @@ instance.networkScore(generations[0], Math.ceil(result[0]) === expected);
 // Must have atleast 1 generation completed before exporting trained data
 
 // Your trained data including the configurations
+// Will export the last generation
 const data = instance.exportData();
 
 const otherNeuvol = new Neuroevolution();
@@ -130,15 +143,14 @@ const otherNeuvol = new Neuroevolution();
 // Import pretrained data
 
 
-// Note: Will set the configurations from data
+// Note: Configuration from exported data will be use
 
 // Import first before calling
-// nextGeneration() function otherwise will not work correctly
-
+// Neuroevolution.nextGeneration() function otherwise will not work correctly
 otherNeuvol.importData(data);
 
 
-otherNeuvol = instance.nextGeneration()
+otherNeuvol = instance.nextGeneration();
 
 ```
 
@@ -182,11 +194,6 @@ __Builds__
 __Formating__
 
 `npm run prettier-format` - Start formating code from `./src` and `./tests` using `Prettier`
-
-## Contributing
-
-Want to correct a bug, contribute some code, or improve the codes? Excellent! Let me know!
-Please read [CONTRIBUTING.md](https://github.com/digitsensitive/neuroevolution-typescript/blob/master/CONTRIBUTING.md) for details on our code of conduct.
 
 ## License
 
