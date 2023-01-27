@@ -22,7 +22,7 @@ In contrast, neuroevolution requires only a measure of a network's performance a
 CDN: 
 
 ```html
-<script src="https://unpkg.com/ts-neuroevolution/dist/neuroevolution.js></script>
+<script src="https://unpkg.com/ts-neuroevolution/dist/neuroevolution.js"></script>
 ```
 
 NPM: 
