@@ -118,6 +118,7 @@ test('Can solve atleast 50%', () => {
   // Create New Neuroevolution Instance
   const feededNeuvol = new Neuroevolution(options);
   let feededGenerations: Network[] = [];
+  
   // Import
   Neuvol.importData(exportedData);
 

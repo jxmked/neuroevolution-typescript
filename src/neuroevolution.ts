@@ -30,17 +30,16 @@ class Neuroevolution {
   constructor(config?: INeuroevolutionConfig) {
     this.configuration = Object.assign(
       {
-        network: [1, [2], 1], // Perceptron network structure (1 hidden // layer).
-        population: 50, // Population by generation.
-        elitism: 0.2, // Best networks kepts unchanged for the next generation (rate).
-        randomBehaviour: 0.2, // New random networks for the next generation (rate).
-        mutationRate: 0.1, // Mutation rate on the weights of synapses.
-        mutationRange: 0.5, // Interval of the mutation changes on the synapse weight
-        historic: 0, // Latest generations saved.
-        lowHistoric: false, // Only save score (not the network).
-        scoreSort: -1, // Sort order (-1 = desc, 1 = asc).
-        nbChild: 1, // Number of children by breeding. number
-        crossoverFactor: 0.5 // Probability of making an absolute copy of weight during breed 0 - 1
+        network: [1, [2], 1],
+        population: 50,
+        elitism: 0.2,
+        randomBehaviour: 0.2,
+        mutationRate: 0.1,
+        historic: 0,
+        lowHistoric: false,
+        scoreSort: -1,
+        nbChild: 1,
+        crossoverFactor: 0.5
       },
       config
     );
@@ -75,7 +74,7 @@ class Neuroevolution {
    */
   public nextGeneration() {
     let networks: INetworkData[] = [];
-    const currentGeneration = this.generations.getGenerations();
+    const currentGeneration = this.generations.generations;
 
     /**
      * If options.lowHistoric is set to true,
@@ -171,7 +170,7 @@ class Neuroevolution {
         gen.addGenome(new Genome(score, network));
       });
 
-      this.generations.getGenerations().push(gen);
+      this.generations.generations.push(gen);
     });
   }
 
@@ -180,7 +179,7 @@ class Neuroevolution {
    * @param {[type]} network [Neural Network]
    * @param {[type]} score   [Score value]
    */
-  public networkScore(network: Network, score: number): boolean {
+  public networkScore(network: Network, score: number): number {
     /**
      * This new genome will improve the next generation
      * but it depends of its score.

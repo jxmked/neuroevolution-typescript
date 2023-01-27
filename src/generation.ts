@@ -23,7 +23,7 @@ export default class Generation {
    * Add a genome to the generation.
    * @param {[type]} _genome [Genome to add]
    */
-  public addGenome(genome: Genome): void {
+  public addGenome(genome: Genome): number {
     /**
      * Locate position to insert new Genome into genome array
      * The genomes should remain sorted by score to
@@ -34,19 +34,20 @@ export default class Generation {
         /* sort in descending order */
         if (genome.score > this.genomes[i].score) {
           this.genomes.splice(i, 0, genome);
-          return;
+          return i;
         }
       } else {
         /* sort in ascending order */
         if (genome.score < this.genomes[i].score) {
           this.genomes.splice(i, 0, genome);
-          return;
+          return i;
         }
       }
     }
 
     // Insert the first genomes
     this.genomes.push(genome);
+    return 0;
   }
 
   /**
@@ -58,7 +59,7 @@ export default class Generation {
       throw new Error('No genome to start with');
     }
 
-    const networkDatas: INetworkData[] = [];
+    const returnData: INetworkData[] = [];
     const { elitism, population, randomBehaviour } = this.ne.options;
     const populationEvolutionary: number = Math.round(elitism * population);
     const noiseLevel: number = Math.round(randomBehaviour * population);
@@ -68,8 +69,8 @@ export default class Generation {
      * previous generation by a percentage of Neuroevolution.options.population
      * */
     for (let i = 0; i < populationEvolutionary; i++) {
-      if (networkDatas.length < population) {
-        networkDatas.push(cloneDeep(this.genomes[i].network));
+      if (returnData.length < population) {
+        returnData.push(cloneDeep(this.genomes[i].network));
       }
     }
 
@@ -78,7 +79,7 @@ export default class Generation {
      *
      * {Neuroevolution.options.randomBehaviour}
      * */
-    if (noiseLevel > 0 && networkDatas.length < population) {
+    if (noiseLevel > 0 && returnData.length < population) {
       for (let i = 0; i < noiseLevel; i++) {
         const weightLen: number = this.genomes[0].network.weights.length;
         const network: INetworkData = {
@@ -90,7 +91,7 @@ export default class Generation {
           network.weights[i] = this.randomClamped();
         }
 
-        networkDatas.push(network);
+        returnData.push(network);
       }
     }
 
@@ -107,14 +108,14 @@ export default class Generation {
         const childs = this.breeder(this.genomes[i], this.genomes[max]);
 
         for (const child of childs) {
-          networkDatas.push(child.network);
+          returnData.push(child.network);
 
-          if (networkDatas.length >= population) {
+          if (returnData.length >= population) {
             /**
              * Return once number of children is equal to the
              * population by generation value
              * */
-            return networkDatas;
+            return returnData;
           }
         }
       }

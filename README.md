@@ -10,18 +10,26 @@
 ## Neuroevolution
 
 Neuroevolution, or neuro-evolution, is a form of machine learning that uses evolutionary algorithms to train artificial neural networks.
-It is most commonly applied in artificial life, computer games, and evolutionary robotics. A main benefit is that neuroevolution can be applied more
-widely than supervised learning algorithms, which require a syllabus of correct input-output pairs. In contrast, neuroevolution requires only a measure
-of a network's performance at a task. For example, the outcome of a game (i.e. whether one player won or lost) can be easily measured without providing
-labeled examples of desired strategies.
+
+It is most commonly applied in artificial life, computer games, and evolutionary robotics. 
+A main benefit is that neuroevolution can be applied more widely than supervised learning algorithms, which require a syllabus of correct input-output pairs.
+In contrast, neuroevolution requires only a measure of a network's performance at a task. For example, the outcome of a game 
+(i.e. whether one player won or lost) can be easily measured without providing labeled examples of desired strategies.
 
 
 ## Installation
 
-Browser: `<script src="https://unpkg.com/ts-neuroevolution/dist/neuroevolution.js></script>`
+CDN: 
 
-NPM: `npm install --save ts-neuroevolution`
+```html
+<script src="https://unpkg.com/ts-neuroevolution/dist/neuroevolution.js></script>
+```
 
+NPM: 
+
+```sh
+npm install --save ts-neuroevolution
+```
 
 ## Motivation
 
@@ -30,54 +38,89 @@ This library has been greatly influenced by [xviniette](https://github.com/xvini
 ## Configuration
 
 ```ts
-interface INeuroevolutionConfig {
+export interface INeuroevolutionConfig {
+  /**
+   * Network structure
+   * 
+   * @default - [1, [2], 1]
+   * @var number[] - [input, hidden, output]
+   */
+  network?: (number | number[])[];
 
-    // Perceptron network structure (1 hidden // layer).
-    // Default: [1, [1], 1]
-    network?: [number, number[], number];
-    
-    // Population by generation.
-    // Default: 50
-    population?: number;
-    
-    // Best networks kepts unchanged for the next generation (rate).
-    // Default: 0.2
-    elitism?: number;
-    
-    // New random networks for the next generation (rate).
-    // Default: 0.2
-    randomBehaviour?: number;
-    
-    // Mutation rate on the weights of synapses.
-    // Default: 0.1
-    mutationRate?: number;
-    
-    // Interval of the mutation changes on the synapse weight
-    // Default: 0.5
-    mutationRange?: number;
-    
-    // Latest generations saved.
-    // Default: 0
-    historic?: number;
-    
-    // Only save score (not the network).
-    // Default: false
-    lowHistoric?: boolean;
-    
-    // Sort order;
-    // Values: -1 = desc, 1 = asc).
-    // Default: -1
-    scoreSort?: number;
-    
-    // Number of children by breeding.
-    // Values: integer
-    // Default: 1
-    nbChild?: number;
-    
-    // Probability of making an absolute copy of weight during breed 0 - 1
-    // Values: 0.0 - 1.0
-    // Default: 0.5
-    crossoverFactor: number;
+  /**
+   * Population by generation
+   * 
+   * @default - 50
+   * @var number
+   */
+  population?: number;
+
+  /**
+   * Best network kepts unchange for next generation
+   * 
+   * @default - 0.2
+   * @var number - 0.0 - 1.0
+   */
+  elitism?: number;
+
+  /**
+   * Mix trained networks with randomized networks for next generation
+   * 
+   * @default - 0.2
+   * @var number - 0.0 - 1.0
+   */
+  randomBehaviour?: number;
+
+  /**
+   * Perform mutation on some genomes during breed
+   * 
+   * @default - 0.1
+   * @var number - 0.0 - 1.0
+   */
+  mutationRate?: number;
+
+  /**
+   * Number of generation to be saved. 
+   * Set to -1 to only keep the latest generation
+   * 
+   * @default - 0
+   * @var number - -1 - n
+   */
+  historic?: number; // Latest generations saved.
+
+  /**
+   * ...
+   * 
+   * @default - false
+   * @var boolean
+   */
+  lowHistoric?: boolean;
+
+  /**
+   * Sort the best score. AI will rely on best networks
+   * -1 = descending. The highest the better
+   * 1 = ascending. The lowest the better
+   * 
+   * @default - -1
+   * @var number - -1, 1
+   */
+  scoreSort?: number;
+
+  /**
+   * Number of child to produce during breed
+   * 
+   * @default - 1
+   * @var number
+   */
+  nbChild?: number;
+
+  /**
+   * Probability of making an absolute copy of a genomes during breed
+   * 
+   * @default - 0.5
+   * @var number - 0.0 - 1.0
+   */
+  crossoverFactor?: number;
 }
 ```
 
@@ -86,12 +129,14 @@ interface INeuroevolutionConfig {
 // tsconfig.json
 {
   "compilerOptions": {
-    "target": "ES6", // Required. ES Module
-    "module": "ES6", // Required. ES Module
-    "moduleResolution": "node",
+    "target": "ES6", // Recomended. ES Module or Higher
+    "module": "ES6", // Recomended. ES Module or Higher
+    "moduleResolution": "node", // Optional
     "typeRoots": [
       "./node_modules"
     ],
+
+    // Optionals
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

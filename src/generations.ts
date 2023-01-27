@@ -5,29 +5,25 @@ import Neuroevolution from './neuroevolution';
 import { INetworkData } from './types/network-data';
 
 export default class Generations {
-  private generations: Generation[];
+  public generations: Generation[];
   private ne: Neuroevolution;
 
   constructor(ne: Neuroevolution) {
     this.generations = [];
     this.ne = ne;
   }
-
-  public getGenerations(): Generation[] {
-    return this.generations;
-  }
-
+  
   /**
    * Create the first network generation with populated
    * random values.
    */
-  public firstGeneration(input: number, hiddens: number[], output: number): INetworkData[] {
+  public firstGeneration(inputNet: number, hiddenLayers: number[], outputNet: number): INetworkData[] {
     const networkData: INetworkData[] = [];
 
     for (let i = 0; i < this.ne.options.population; i++) {
       const network: Network = new Network();
 
-      network.generateNetworkLayers(input, hiddens, output);
+      network.generateNetworkLayers(inputNet, hiddenLayers, outputNet);
 
       networkData.push(network.getCopyOfTheNetwork());
     }
@@ -37,7 +33,7 @@ export default class Generations {
   }
 
   /**
-   * Create the next
+   * Create the next generation
    */
   public nextGeneration(): INetworkData[] {
     if (this.generations.length === 0) {
@@ -49,16 +45,16 @@ export default class Generations {
     return gen;
   }
 
-  public addGenome(genome: Genome): boolean {
-    /* cant add to a Generation if there are no Generations */
+  /**
+   * Insert new trained genome to use in next generation
+   */
+  public addGenome(genome: Genome): number {
     if (this.generations.length === 0) {
       throw new Error('Cannot insert genome. Generations.generations has no item');
     }
 
     const generation = this.generations[this.generations.length - 1];
 
-    generation.addGenome(genome);
-
-    return generation.genomes.length > 0;
+    return generation.addGenome(genome);
   }
 }
