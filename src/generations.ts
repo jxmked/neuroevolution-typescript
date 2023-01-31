@@ -12,7 +12,7 @@ export default class Generations {
     this.generations = [];
     this.ne = ne;
   }
-  
+
   /**
    * Create the first network generation with populated
    * random values.

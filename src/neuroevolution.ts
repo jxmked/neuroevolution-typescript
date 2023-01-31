@@ -89,7 +89,10 @@ class Neuroevolution {
     this.exportableGenerations = cloneDeep(currentGeneration);
 
     if (currentGeneration.length === 0) {
-      /* if no Generations, create first */
+      /**
+       * Generate generation with random weights
+       * First generation *
+       * */
       // prettier-ignore
       networks = this.generations.firstGeneration(
                 this.options.network[0] as number,
@@ -97,11 +100,15 @@ class Neuroevolution {
                 this.options.network[2] as number
             );
     } else {
-      /* otherwise, create next one */
+      /**
+       * Generate new generation with
+       * calibrated weights of old generation.
+       * 
+       * Thr real next generation *
+       * */
       networks = this.generations.nextGeneration();
     }
 
-    /* create Networks from the current Generation */
     const nns: Network[] = [];
 
     for (const network of networks) {
