@@ -103,7 +103,7 @@ class Neuroevolution {
       /**
        * Generate new generation with
        * calibrated weights of old generation.
-       * 
+       *
        * Thr real next generation *
        * */
       networks = this.generations.nextGeneration();
