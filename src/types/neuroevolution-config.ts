@@ -3,7 +3,7 @@ import { INetworkData } from './network-data';
 export interface INeuroevolutionConfig {
   /**
    * Network structure
-   * 
+   *
    * @default - [1, [2], 1]
    * @var number[] - [input, hidden, output]
    */
@@ -11,7 +11,7 @@ export interface INeuroevolutionConfig {
 
   /**
    * Population by generation
-   * 
+   *
    * @default - 50
    * @var number
    */
@@ -19,7 +19,7 @@ export interface INeuroevolutionConfig {
 
   /**
    * Best network kepts unchange for next generation
-   * 
+   *
    * @default - 0.2
    * @var number - 0.0 - 1.0
    */
@@ -27,7 +27,7 @@ export interface INeuroevolutionConfig {
 
   /**
    * Mix trained networks with randomized networks for next generation
-   * 
+   *
    * @default - 0.2
    * @var number - 0.0 - 1.0
    */
@@ -35,16 +35,16 @@ export interface INeuroevolutionConfig {
 
   /**
    * Perform mutation on some genomes during breed
-   * 
+   *
    * @default - 0.1
    * @var number - 0.0 - 1.0
    */
   mutationRate?: number;
 
   /**
-   * Number of generation to be saved. 
+   * Number of generation to be saved.
    * Set to -1 to only keep the latest generation
-   * 
+   *
    * @default - 0
    * @var number - -1 - n
    */
@@ -52,7 +52,7 @@ export interface INeuroevolutionConfig {
 
   /**
    * ...
-   * 
+   *
    * @default - false
    * @var boolean
    */
@@ -62,7 +62,7 @@ export interface INeuroevolutionConfig {
    * Sort the best score. AI will rely on best networks
    * -1 = descending. The highest the better
    * 1 = ascending. The lowest the better
-   * 
+   *
    * @default - -1
    * @var number - -1, 1
    */
@@ -70,7 +70,7 @@ export interface INeuroevolutionConfig {
 
   /**
    * Number of child to produce during breed
-   * 
+   *
    * @default - 1
    * @var number
    */
@@ -78,7 +78,7 @@ export interface INeuroevolutionConfig {
 
   /**
    * Probability of making an absolute copy of a genomes during breed
-   * 
+   *
    * @default - 0.5
    * @var number - 0.0 - 1.0
    */

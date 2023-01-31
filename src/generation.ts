@@ -95,6 +95,16 @@ export default class Generation {
       }
     }
 
+    // PR-5
+    /**
+     * If the configuration for code above has been maximize
+     * It can produce unexpected output.
+     * To solve it, we can check and slice the returnData for a codition
+     * */
+    if (returnData.length >= population) {
+      return returnData.slice(0, population);
+    }
+
     let max = 1;
 
     /* eslint-disable no-constant-condition */
