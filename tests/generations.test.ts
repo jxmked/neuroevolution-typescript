@@ -63,11 +63,11 @@ test('Generate the second generation', () => {
 
 test('Can insert genome', () => {
   expect(
-    generations.addGenome(
+    typeof generations.addGenome(
       new Genome(0, {
         weights: [],
         neurons: []
       })
     )
-  ).toBeTruthy();
+  ).toBe('number');
 });
